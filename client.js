@@ -1,22 +1,25 @@
 var _ = require('underscore')
-,   config = require('./test/config')
-,   client = require('knox').createClient(config)
 
 module.exports = {
+
     create: function(config) {
-    
+        this.config = config
+        this.client = require('knox').createClient(config)
+        return this
     }
     ,
     // save a jpg from the local filesystem and call cb(err, data)
     save: function(path, cb) {
+        
+        var self = this
 
         require('fs').readFile(path, function(err, buf) {
             
             if (err) cb(err, null)
             
             var guid   = require('guid').create().toString() +'.jpg' 
-            ,   bucket = config.folder + '/' + guid
-            ,   req    = client.put(bucket, {'Content-Length': buf.length, 'Content-Type': 'image/jpeg'})
+            ,   bucket = self.config.folder + '/' + guid
+            ,   req    = self.client.put(bucket, {'Content-Length': buf.length, 'Content-Type': 'image/jpeg'})
             
             req.on('response', function(res) {
                 if (200 == res.statusCode) {
@@ -36,8 +39,9 @@ module.exports = {
         var args = [].slice.call(arguments)
         ,   opts = _.isObject(args[0]) ? args[0] : {}
         ,   cb   = _.isFunction(args[0]) ? args[0] : args[1]
+        ,   self = this
 
-        client.get('?prefix=' + config.folder + '/').on('response', function(res){
+        this.client.get('?prefix=' + this.config.folder + '/').on('response', function(res){
             
             var nasty = ''
             ,   xml2js = require('xml2js')
@@ -62,7 +66,7 @@ module.exports = {
                                 var clean = result.Contents.map(function(o) { 
                                     return o.Key 
                                 }).filter(function(o) {
-                                    return o != 'https://s3.amazonaws.com/'+ config.bucket + '/' + config.folder + '/'
+                                    return o != 'https://s3.amazonaws.com/'+ self.config.bucket + '/' + self.config.folder + '/'
                                 })
                                 cb(null, clean)
                             }
@@ -81,9 +85,10 @@ module.exports = {
     // all(options, cb)
     // all(cb)
     all: function(cb) {
+        var self = this
         this.keys(function(err, keys) {
             cb(err, keys.map(function(key) {
-                return 'https://s3.amazonaws.com/'+ config.bucket + '/' + key
+                return 'https://s3.amazonaws.com/'+ self.config.bucket + '/' + key
             }))
         })
     }
@@ -108,7 +113,7 @@ module.exports = {
     ,
     // destroy a photo by key
     destroy: function(key, cb) {
-        client.del(key).on('response', function(res){
+        this.client.del(key).on('response', function(res){
             res.on('end', cb || function(){})
         }).end()
     }

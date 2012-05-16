@@ -1,6 +1,6 @@
 should = require 'should'
 config = require './config'
-photo = require('./../client')
+photo = require('./../client').create(config)
 
 describe 'Photo', ->
   
@@ -17,7 +17,7 @@ describe 'Photo', ->
       photo.save photo_path, (err, url)->
         throw err if err
         done()
-        ###
+  
   describe '#all()', ->
     it 'should list all photos', (done)->
       photo.all (err, data)->
@@ -34,4 +34,3 @@ describe 'Photo', ->
           photo.all (err, data)->
             data.length.should.eql(0)
             done()
-            ###
