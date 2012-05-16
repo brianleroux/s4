@@ -1,19 +1,19 @@
-# super simple s3
+# super simple storage solution client
 
-Super high level wrapper lib for Amazon S3. API is Lawnchair-ish mixed with some Node-isms. Ish.
+Super high level wrapper client for Amazon S3.
 
 ## Why?
 
-Wanted something cleaner to quickly fuck around w/ S3 without diving into lower level and more verbose http business. If you want to be close to the metal I suggest Knox and/or just using Mikeals Request. 
+Wanted something cleaner to quickly fuck around w/ S3 without diving into lower level and more verbose http business. Especially decent in the terminal. If you want to be close to the metal I suggest Knox and/or just using Mikeals Request. 
 
 ## Install
 
-    npm install sss3
+    npm install s4
 
 ## Usage
 
     var config = {key:'', secret:'', bucket:'io.brian.photos', folder:'funny'}
-    ,   photos = require('sss3').init(config)
+    ,   photos = require('s4').create(config)
     ,   pic    = require('path').join(__dirname, 'funny.jpg')
 
     photos.save(pic, function(err, key) {
@@ -22,12 +22,16 @@ Wanted something cleaner to quickly fuck around w/ S3 without diving into lower 
 
 ### API
 
-    save
+    create(config)
 
-    keys
+    save(path, callback)
 
-    all
+    keys(callback)
+    keys(options, callback)
 
-    nuke
+    all(callback)
+    all(options, callback)
 
-    destroy
+    nuke(callback)
+
+    destroy(callback)
