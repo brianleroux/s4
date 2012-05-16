@@ -1,0 +1,2 @@
+--compilers coffee:coffee-script
+-t 15000
