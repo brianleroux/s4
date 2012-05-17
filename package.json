@@ -1,7 +1,7 @@
 { "author"          : "Brian LeRoux <b@brian.io> (brian.io)"
 , "name"            : "s4"
 , "description"     : "super simple storage solution: aws s3 client"
-, "version"         : "0.1.1"
+, "version"         : "0.1.2"
 , "license"         : "MIT"
 , "keywords"        : ["aws","s3","s4","amazon"]
 , "repository"      : {"type": "git","url": "github.com:brianleroux/s4.git" }
