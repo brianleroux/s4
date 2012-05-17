@@ -17,13 +17,14 @@ module.exports = {
         ,   options    = _.isObject(opts)
         ,   filePath   = options ? opts.src  : opts
         ,   remoteName = options ? opts.dest : require('guid').create().toString() +'.jpg' // <--FIXME hardcoded name as jpg bad
-        
+        ,   contentType = options ? opts.type : 'image/jpeg' // <--FIXME as above
+
         require('fs').readFile(filePath, function(err, buf) {
             
             if (err) cb(err, null)
             
             var bucket = self.config.folder + '/' + remoteName
-            ,   req    = self.client.put(bucket, {'Content-Length': buf.length, 'Content-Type': 'image/jpeg'}) // <--FIXME hardcoded Content-Type bad
+            ,   req    = self.client.put(bucket, {'Content-Length': buf.length, 'Content-Type': contentType})
             
             req.on('response', function(res) {
                 if (200 == res.statusCode) {
