@@ -9,17 +9,21 @@ module.exports = {
     }
     ,
     // save a jpg from the local filesystem and call cb(err, data)
-    save: function(path, cb) {
-        
-        var self = this
+    // save(path, cb)
+    // save({src:'path/to/local.jpg', dest:'remote.jpg'}, cb)
+    save: function(opts, cb) {
 
-        require('fs').readFile(path, function(err, buf) {
+        var self       = this
+        ,   options    = _.isObject(opts)
+        ,   filePath   = options ? opts.src  : opts
+        ,   remoteName = options ? opts.dest : require('guid').create().toString() +'.jpg' // <--FIXME hardcoded name as jpg bad
+        
+        require('fs').readFile(filePath, function(err, buf) {
             
             if (err) cb(err, null)
             
-            var guid   = require('guid').create().toString() +'.jpg' 
-            ,   bucket = self.config.folder + '/' + guid
-            ,   req    = self.client.put(bucket, {'Content-Length': buf.length, 'Content-Type': 'image/jpeg'})
+            var bucket = self.config.folder + '/' + remoteName
+            ,   req    = self.client.put(bucket, {'Content-Length': buf.length, 'Content-Type': 'image/jpeg'}) // <--FIXME hardcoded Content-Type bad
             
             req.on('response', function(res) {
                 if (200 == res.statusCode) {
