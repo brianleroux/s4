@@ -9,7 +9,7 @@ module.exports = {
     }
     ,
     urlFor: function(key) {
-        return 'https://s3.amazonaws.com/'+ this.config.bucket + '/' + this.config.folder + '/' + this.key
+        return 'https://s3.amazonaws.com/'+ this.config.bucket + '/' + this.config.folder + '/' + key
     }
     ,
     // save a jpg from the local filesystem and call cb(err, data)
