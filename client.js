@@ -8,6 +8,10 @@ module.exports = {
         return this
     }
     ,
+    urlFor: function(key) {
+        return 'https://s3.amazonaws.com/'+ self.config.bucket + '/' + self.config.folder + '/' + self.key
+    }
+    ,
     // save a jpg from the local filesystem and call cb(err, data)
     // save(path, cb)
     // save({src:'path/to/local.jpg', dest:'remote.jpg'}, cb)
