@@ -12,7 +12,7 @@ module.exports = {
         return 'https://s3.amazonaws.com/'+ this.config.bucket + '/' + this.config.folder + '/' + key
     }
     ,
-    // save a jpg from the local filesystem and call cb(err, data)
+    // save a file from the local filesystem and call cb(err, data)
     // save(path, cb)
     // save({src:'path/to/local.jpg', dest:'remote.jpg'}, cb)
     save: function(opts, cb) {
@@ -20,8 +20,9 @@ module.exports = {
         var self       = this
         ,   options    = _.isObject(opts)
         ,   filePath   = options ? opts.src  : opts
-        ,   remoteName = options ? opts.dest : require('guid').create().toString() +'.jpg' // <--FIXME hardcoded name as jpg bad
-        ,   contentType = options ? opts.type : 'image/jpeg' // <--FIXME as above
+        ,   fileExt    = options ? opts.ext : require('path').extname(filePath)
+        ,   remoteName = options ? opts.dest : require('guid').create().toString() + fileExt
+        ,   contentType = options ? opts.type : require('mime').lookup(filePath)
 
         require('fs').readFile(filePath, function(err, buf) {
             
